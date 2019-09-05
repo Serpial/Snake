@@ -18,6 +18,6 @@ class BoardPiece (turtle.Turtle):
         self.is_snake = True
 
     def remove_snake_piece(self):
-        self.color("black", "red")
+        self.color("black", "green")
         self.is_snake = False
 
