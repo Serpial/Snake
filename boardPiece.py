@@ -10,7 +10,7 @@ class BoardPiece (turtle.Turtle):
         self.speed(0)
         self.shape("square")
         self.shapesize(1,1,0.5)
-        self.color("black", "green")
+        self.color("black")
         self.penup()
 
     def make_snake_piece(self):
@@ -18,6 +18,10 @@ class BoardPiece (turtle.Turtle):
         self.is_snake = True
 
     def remove_snake_piece(self):
-        self.color("black", "green")
+        self.color("black")
         self.is_snake = False
+
+    def make_apple(self):
+        self.color("green")
+        self.is_apple = True
 

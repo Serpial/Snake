@@ -14,6 +14,7 @@ move_speed = 0.75  # In Seconds
 
 board = board.Board(19)
 board.activate_snake_pieces()
+board.generate_new_apple()
 
 # Set up controls
 window.onkeypress(board.set_control_up, board.snake_controls[0])
@@ -31,7 +32,7 @@ while continue_playing:
 
     window.update()
     current_time = floor(time.time())
-    # Set up an interupt here for user input
+    # Check if it is time to move the snake or the user has requested a move
     if board.current_direction != previous_direction or\
     current_time > (previous_time + move_speed):
         previous_time = current_time

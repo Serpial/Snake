@@ -37,12 +37,22 @@ class Board (turtle.Turtle):
         # First Deactivate all snake pieces
         for i in range(self.width):
             for j in range(self.width):
-                self.board[i][j].remove_snake_piece()
+                if not self.board[i][j].is_apple:
+                    self.board[i][j].remove_snake_piece()
         # Then reactivate the right ones
         for i in range(len(self.snake_pieces)):
             self.board[self.snake_pieces[i][0]]\
                 [self.snake_pieces[i][1]].make_snake_piece()
-        
+
+    def generate_new_apple(self):
+        empty_pieces = []
+        for i in range(self.width):
+            for j in range(self.width):
+                if not self.board[i][j].is_snake:
+                    empty_pieces.append((i, j))
+
+        new_apple = empty_pieces[randint(0, len(empty_pieces)-1)]
+        self.board[new_apple[0]][new_apple[1]].make_apple()
             
     def move_in_direction(self):
         next_square = (0,0)
@@ -56,14 +66,17 @@ class Board (turtle.Turtle):
         if self.current_direction == "west":
             next_square = (head_of_snake[0]-1, head_of_snake[1])
 
-        print("Head: {}, Next: {}".format(head_of_snake, next_square))
         # If the snake has ate an apple it can grow, otherwise
         #    the last item is lost in the movement
         if (next_square[0] < 0 or next_square[1] < 0) or\
              (next_square[0] >= self.width or next_square[1] >= self.width):
             return False
         elif self.board[next_square[0]][next_square[1]].is_apple:
+            # Collect apple
             self.snake_pieces.insert(0, next_square)
+            self.board[next_square[0]][next_square[1]].is_apple = False
+            # Generate new apple
+            self.generate_new_apple()
         else:
             self.snake_pieces.insert(0, next_square)
             self.snake_pieces.pop()
