@@ -1,6 +1,5 @@
 import turtle, time
 import boardPiece, board
-from math import floor
 
 
 # Set up window
@@ -25,13 +24,13 @@ window.listen()
 
 # Start Movements
 continue_playing = True
-previous_time = floor(time.time())
+previous_time = time.time()
 previous_direction = board.current_direction
 print("Starting direction : " + board.current_direction)
+# Run game
 while continue_playing:
-
     window.update()
-    current_time = floor(time.time())
+    current_time = time.time()
     # Check if it is time to move the snake or the user has requested a move
     if board.current_direction != previous_direction or\
     current_time > (previous_time + move_speed):

@@ -53,43 +53,53 @@ class Board (turtle.Turtle):
 
         new_apple = empty_pieces[randint(0, len(empty_pieces)-1)]
         self.board[new_apple[0]][new_apple[1]].make_apple()
-            
-    def move_in_direction(self):
-        next_square = (0,0)
+
+    def get_next_square(self):
         head_of_snake = self.snake_pieces[0]
         if self.current_direction == "north":
-            next_square = (head_of_snake[0], head_of_snake[1]+1)
+            return (head_of_snake[0], head_of_snake[1]+1)
         if self.current_direction == "east":
-            next_square = (head_of_snake[0]+1, head_of_snake[1])
+            return (head_of_snake[0]+1, head_of_snake[1])
         if self.current_direction == "south":
-            next_square = (head_of_snake[0], head_of_snake[1]-1)
+            return (head_of_snake[0], head_of_snake[1]-1)
         if self.current_direction == "west":
-            next_square = (head_of_snake[0]-1, head_of_snake[1])
-
+            return (head_of_snake[0]-1, head_of_snake[1])
+            
+    def move_in_direction(self):
+        next_square = self.get_next_square()
+        
         # If the snake has ate an apple it can grow, otherwise
         #    the last item is lost in the movement
         if (next_square[0] < 0 or next_square[1] < 0) or\
              (next_square[0] >= self.width or next_square[1] >= self.width):
             return False
+        elif next_square in self.snake_pieces:
+            # If the snake is about to crash into itself
+            return False
         elif self.board[next_square[0]][next_square[1]].is_apple:
             # Collect apple
             self.snake_pieces.insert(0, next_square)
             self.board[next_square[0]][next_square[1]].is_apple = False
-            # Generate new apple
             self.generate_new_apple()
         else:
             self.snake_pieces.insert(0, next_square)
             self.snake_pieces.pop()
         return True
     
+    # These are called when the hits a directional key
     def set_control_up(self):
-        self.current_direction = self.snake_directions[0]
+        self.change_direction(0)
 
     def set_control_right(self):
-        self.current_direction = self.snake_directions[1]
+        self.change_direction(1)
 
     def set_control_down(self):
-        self.current_direction = self.snake_directions[2]
+        self.change_direction(2)
         
     def set_control_left(self):
-        self.current_direction = self.snake_directions[3]
+        self.change_direction(3)
+
+    # Restrict the way the user can move the snake
+    def change_direction(self, new_dir):
+        if self.current_direction != self.snake_directions[(new_dir+2)%4]:
+            self.current_direction = self.snake_directions[new_dir]
